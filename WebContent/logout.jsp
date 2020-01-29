@@ -8,7 +8,6 @@
 </head>
 <body>
 		<%
-			session.removeValue("userName");
 			session.removeAttribute("userName");
 			session.invalidate();
 			response.sendRedirect("login.jsp");

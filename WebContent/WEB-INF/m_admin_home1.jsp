@@ -53,12 +53,9 @@
 			
 		</table>
 		
-		
-		
-		
-		
 		<br><br><br><br>
 	
+				<!--POLICE EMPLOYEE LIST  -->
 		<table border="1">
 		
 			<thead>
@@ -111,15 +108,3 @@
 </div>
 </body>
 </html>
-
-
-
-<%-- 
-<a href="login" >
-			Logout <%=session.invalidate()%>
-			<%	Function logOut()
-			{
-				
-			}
-			%>
-		</a> --%>

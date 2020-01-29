@@ -1,8 +1,6 @@
 package com.spr.service;
 
 import java.util.List;
-
-
 import com.spr.dto.PoliceEmployee;
 
 public interface PoliceEmployeeService {
@@ -17,4 +15,8 @@ public interface PoliceEmployeeService {
 	List<PoliceEmployee> policeEmpList(int ps_id);
 	
 	int getSubAdminPsId(String userName);
+	
+	int getRoleIdOfSubAdmin(String userEmail);
+	
+	String getRole_desc(int role_id);
 }

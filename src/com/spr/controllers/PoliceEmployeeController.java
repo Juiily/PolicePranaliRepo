@@ -24,8 +24,8 @@ public class PoliceEmployeeController {
 		this.policeEmpServ = policeEmpServ;
 	}
 
-//PoliceStationList
-//----------------------------------------------------------------------------------------
+	//PoliceStationList
+	//--------------------------------------------------------------------------------------------------------------
 	@RequestMapping(value = "/poList",method = RequestMethod.POST)
 	public ModelAndView listOfPoliceEmp(@RequestParam String id) {
 
@@ -36,83 +36,148 @@ public class PoliceEmployeeController {
 		List<PoliceEmployee> poEmpList = policeEmpServ.policeList(id1);
 
 		model.addObject("poEmpList", poEmpList);
-		model.setViewName("home");
+		model.setViewName("m_admin_home");
 		return model ;
 	}
 
-//PoliceEmployeeList
-//---------------------------------------------------------------------------------------------------------------
-
+	//PoliceEmployeeList
+	//---------------------------------------------------------------------------------------------------------------
 	@RequestMapping(value = "assignAdmin", method = RequestMethod.POST)
 	public ModelAndView assignSubAdmin(@RequestParam String id,@RequestParam String roleId,HttpSession session)
 	{
 		int id1 = Integer.parseInt(id);
 		int roleId1 = Integer.parseInt(roleId);
-		String nk = "nk";
+		
 		ModelAndView model = new ModelAndView();
 
-		if(roleId1 == 0 && session.getAttribute("userName").equals(nk))
+		if(roleId1 == 0)
 		{
-			roleId1 = 22;
+			roleId1 = 55;
 			policeEmpServ.setPsAdmin(id1, roleId1);
 		}
 
-		else if(roleId1 == 22  && session.getAttribute("userName").equals(nk))
+		else if(roleId1 == 55)
 		{	
 			String roleId2 = null;
 			policeEmpServ.removePsAdmin(id1,roleId2);
 		}
-		model.setViewName("home");
+		model.setViewName("m_admin_home");
 		return model;
 
 	}
 
-//Police SubAdmin Role Assignment
-//---------------------------------------------------------------------------------------------------------------
+	//Assign FEO
+	//---------------------------------------------------------------------------------------------------------------	
+	@RequestMapping(value = "assignAdmin1", method = RequestMethod.POST)
+	public ModelAndView assignFEO1(@RequestParam String id,@RequestParam String roleId,HttpSession session,@RequestParam String userEmail)
+	{
+		int id1 = Integer.parseInt(id);
+		int roleId1 = Integer.parseInt(roleId);
+		
+		int getRoleId = policeEmpServ.getRoleIdOfSubAdmin(userEmail);
+		
+		
+		ModelAndView model = new ModelAndView();
 
-		@RequestMapping(value = "deleteAdmin", method = RequestMethod.POST)
-		public ModelAndView removeSubAdmin(@RequestParam String id,@RequestParam String roleId,HttpSession session)
+		if(getRoleId==55)
 		{
-			int id1 = Integer.parseInt(id);
-			int roleId1 = Integer.parseInt(roleId);
-			String nk = "nk";
-			ModelAndView model = new ModelAndView();
-
-			if(roleId1 == 0 && session.getAttribute("userName").equals(nk))
+			if(roleId1 == 0 )
 			{
-				roleId1 = 22;
+				roleId1 = 66;
 				policeEmpServ.setPsAdmin(id1, roleId1);
 			}
-
-			else if(roleId1 == 22  && session.getAttribute("userName").equals(nk))
+	
+			else if(roleId1 == 66)
 			{	
 				String roleId2 = null;
 				policeEmpServ.removePsAdmin(id1,roleId2);
 			}
-			model.setViewName("home");
-			return model;
-
 		}	
+		model.setViewName("s_admin_home");
+		return model;
 
-
-//Employee's for Police SubAdmin
-//---------------------------------------------------------------------------------------------------------------
-
-		@RequestMapping(value = "psEmpListForSubAdmin",method = RequestMethod.POST)
-		public ModelAndView displayListToSubAdmin(ModelAndView model,@RequestParam String userName) {
-			
-			int gotId = policeEmpServ.getSubAdminPsId(userName);
-			System.out.println("GOT ID IS -> "+gotId+"GOT UserName IS ->"+userName);
-			
-			List<PoliceEmployee> policeList = policeEmpServ.policeEmpList(gotId);
+	}
+	
+	//Police SubAdmin Role Assignment
+	//---------------------------------------------------------------------------------------------------------------
+	@RequestMapping(value = "deleteAdmin", method = RequestMethod.POST)
+	public ModelAndView removeSubAdmin(@RequestParam String id,@RequestParam String roleId,HttpSession session)
+	{
+		int id1 = Integer.parseInt(id);
+		int roleId1 = Integer.parseInt(roleId);
 		
-			model.addObject("policeList", policeList);
-			model.setViewName("S_AdminHome");
-		
-			return model;
+		ModelAndView model = new ModelAndView();
+
+		if(roleId1 == 0)
+		{
+			roleId1 = 55;
+			policeEmpServ.setPsAdmin(id1, roleId1);
 		}
+
+		else if(roleId1 == 55)
+		{	
+			String roleId2 = null;
+			policeEmpServ.removePsAdmin(id1,roleId2);
+		}
+		model.setViewName("m_admin_home");
+		return model;
+
+	}	
+
+	//Remove FEO
+	//---------------------------------------------------------------------------------------------------------------
+	@RequestMapping(value = "deleteAdmin1", method = RequestMethod.POST)
+	public ModelAndView removeFEO1(@RequestParam String id,@RequestParam String roleId,HttpSession session)
+	{
+		int id1 = Integer.parseInt(id);
+		int roleId1 = Integer.parseInt(roleId);
 		
+		ModelAndView model = new ModelAndView();
+
+		if(roleId1 == 0 )
+		{
+			roleId1 = 66;
+			policeEmpServ.setPsAdmin(id1, roleId1);
+		}
+
+		else if(roleId1 == 66)
+		{	
+			String roleId2 = null;
+			policeEmpServ.removePsAdmin(id1,roleId2);
+		}
+		model.setViewName("s_admin_home");
+		return model;
+
+	}	
+
+	//Employee's for Police SubAdmin
+	//---------------------------------------------------------------------------------------------------------------
+	@RequestMapping(value = "psEmpListForSubAdmin",method = RequestMethod.POST)
+	public ModelAndView displayListToSubAdmin(ModelAndView model,@RequestParam String userEmail) {
+
+		int gotId = policeEmpServ.getSubAdminPsId(userEmail);
+
+		List<PoliceEmployee> policeList = policeEmpServ.policeEmpList(gotId);
+
+		model.addObject("policeList", policeList);
+		model.setViewName("s_admin_home");
+
+		return model;
+	}
+
+	
+	//for description of role
+	//---------------------------------------------------------------------------------------
+	
+	public ModelAndView displayRoleDesc(ModelAndView model,@RequestParam int role_id)
+	{
+		String desc = policeEmpServ.getRole_desc(role_id);
+		model.addObject("roledesc", desc);
+		model.setViewName("s_admin_home");
 		
+		return model;
 		
+	}
+
 }
 

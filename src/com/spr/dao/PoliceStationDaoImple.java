@@ -10,7 +10,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import com.spr.dto.Fir;
 import com.spr.dto.PoliceStation;
 
 @Repository
@@ -28,7 +27,7 @@ public class PoliceStationDaoImple implements PoliceStationDao {
 	public List<PoliceStation> pList() {
 		// TODO Auto-generated method stub
 		
-		String sql="select * from policestation";
+		String sql="select * from m_policestation";
 		
 		List<PoliceStation> poList=jt.query(sql, new RowMapper<PoliceStation>() {
 			
@@ -53,12 +52,5 @@ public class PoliceStationDaoImple implements PoliceStationDao {
 		return poList;
 	}
 
-		
-
-	@Override
-	public List<Fir> fList(Fir fir) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 }

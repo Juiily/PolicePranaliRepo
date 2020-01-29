@@ -28,7 +28,7 @@ public class PoliceStationController {
 	{
 		List<PoliceStation>psList=psService.pList();
 		model.addObject("psList",psList);
-		model.setViewName("home");
+		model.setViewName("m_admin_home");
 		
 		return model;
 	}

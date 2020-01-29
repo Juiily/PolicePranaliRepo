@@ -20,14 +20,15 @@
 	
 	<bean class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
-		<property name="url" value="jdbc:mysql://localhost:3306/login?useSSL=false"></property>
+		<property name="url" value="jdbc:mysql://localhost:3306/policepranali?useSSL=false"></property>
 		<property name="username" value="root"></property>
-		<property name="password" value="cdac"></property>
+		<property name="password" value="Mysql2991#"></property>
 	</bean>
 		
 	<context:component-scan base-package="com.spr"></context:component-scan>
    
-<bean id="jt" class="org.springframework.jdbc.core.JdbcTemplate" autowire="byType"></bean>
+   
+	<bean id="jt" class="org.springframework.jdbc.core.JdbcTemplate" autowire="byType"></bean>
 
 
 </beans>

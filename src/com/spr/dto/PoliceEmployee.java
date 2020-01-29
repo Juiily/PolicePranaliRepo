@@ -12,6 +12,7 @@ public class PoliceEmployee {
 	private Date emp_dob;
 	private int ps_id;
 	private int role_id;
+	private String role_desc;
 
 	public int getRole_id() {
 		return role_id;
@@ -70,6 +71,16 @@ public class PoliceEmployee {
 	public void setPs_id(int ps_id) {
 		this.ps_id = ps_id;
 	}
+	
+	
+	public String getRole_desc() {
+		return role_desc;
+	}
+	public void setRole_desc(String role_desc) {
+		this.role_desc = role_desc;
+	}
+	
+	
 	@Override
 	public String toString() {
 		return "PoliceEmployee [emp_id=" + emp_id + ", emp_name=" + emp_name + ", emp_mob=" + emp_mob + ", emp_desig="

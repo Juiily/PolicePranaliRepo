@@ -5,6 +5,7 @@ public class PoliceStation {
 	private int ps_Id;
 	private String ps_Name;
 	private String ps_Address;
+	
 	public int getPs_Id() {
 		return ps_Id;
 	}

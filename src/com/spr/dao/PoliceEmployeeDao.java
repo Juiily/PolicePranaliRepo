@@ -15,5 +15,9 @@ public interface PoliceEmployeeDao {
 	
 	List<PoliceEmployee> policeEmpList(int ps_id);
 	
-	int getSubAdminPsId(String userName);
+	int getSubAdminPsId(String userEmail);
+	
+	int getRoleIdOfSubAdmin(String userEmail); 
+	
+	String getRole_desc(int role_id);
 }

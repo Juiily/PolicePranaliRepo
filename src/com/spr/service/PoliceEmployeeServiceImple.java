@@ -41,6 +41,16 @@ public class PoliceEmployeeServiceImple implements PoliceEmployeeService {
 	public int getSubAdminPsId(String userName) {
 		return policeEmpDao.getSubAdminPsId(userName);
 	}
+
+	@Override
+	public int getRoleIdOfSubAdmin(String userEmail) {
+		return policeEmpDao.getRoleIdOfSubAdmin(userEmail);
+	}
+
+	@Override
+	public String getRole_desc(int role_id) {
+		return policeEmpDao.getRole_desc(role_id);
+	}
 	
 	
 }

@@ -1,10 +1,10 @@
-package com.spr.service;
+package com.spr.dao;
 
 import com.spr.dto.PoliceEmployee;
 import com.spr.dto.User;
 
-public interface UserService {
-
+public interface UserDao {
+	
 	User Login(User user);
 	PoliceEmployee getUserName(String userEmail);
 }

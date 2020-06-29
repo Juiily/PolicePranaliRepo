@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.spr.dto.PoliceEmployee;
 import com.spr.dto.User;
@@ -21,7 +22,7 @@ public class PoliceEmployeeDaoImple implements PoliceEmployeeDao {
 		this.jt = jt;
 	}
 
-	
+	@Override
 	public List<PoliceEmployee> policeList(int ps_id) {
 		
 		String sql = "select*from ps_emp where ps_id = ?"; 
@@ -71,27 +72,24 @@ public class PoliceEmployeeDaoImple implements PoliceEmployeeDao {
 	@Override
 	public List<PoliceEmployee> policeEmpList(int ps_id) {
 		
-		String sql = "select*from ps_emp where ps_id = ? ";
+		String sql = "select emp_id,emp_name,emp_desig,emp_mob,emp_email,emp_dob,ps_id, ps_emp.role_id,m_role.role_desc from ps_emp left join m_role on ps_emp.role_id = m_role.role_id where ps_id = ?";
 						
 		List<PoliceEmployee> policeEmpList = jt.query(sql, new Object[] {ps_id}, new RowMapper<PoliceEmployee>()
 				{
 
 					@Override
-					public PoliceEmployee mapRow(ResultSet rs, int rowNum) throws SQLException {
-						PoliceEmployee psEmp = new PoliceEmployee();
-						
-							psEmp.setEmp_id(rs.getInt(1));
-						
-							psEmp.setEmp_id(rs.getInt("emp_id"));
-							psEmp.setEmp_mob(rs.getLong("emp_mob"));
-							psEmp.setEmp_desig(rs.getString("emp_desig"));
-							psEmp.setEmp_name(rs.getString("emp_name"));
-							psEmp.setEmp_dob(rs.getDate("emp_dob"));
-							psEmp.setEmp_email(rs.getString("emp_email"));
-							psEmp.setPs_id(rs.getInt("ps_id"));
-							psEmp.setRole_id(rs.getInt("role_id"));
-							
-						return psEmp;
+					public PoliceEmployee mapRow(ResultSet rs, int rowNum) throws SQLException {				
+						PoliceEmployee ps = new PoliceEmployee();
+						ps.setEmp_id(rs.getInt("emp_id"));
+						ps.setEmp_mob(rs.getLong("emp_mob"));
+						ps.setEmp_desig(rs.getString("emp_desig"));
+						ps.setEmp_name(rs.getString("emp_name"));
+						ps.setEmp_dob(rs.getDate("emp_dob"));
+						ps.setEmp_email(rs.getString("emp_email"));
+						ps.setPs_id(rs.getInt("ps_id"));
+						ps.setRole_id(rs.getInt("role_id"));
+						ps.setRole_desc(rs.getString("role_desc"));
+						return ps;
 				}
 			});
 		
@@ -136,8 +134,6 @@ public class PoliceEmployeeDaoImple implements PoliceEmployeeDao {
 		return psId;
 		
 	}
-	
-
 
 	@Override
 	public int getRoleIdOfSubAdmin(String userEmail) {
@@ -155,7 +151,6 @@ public class PoliceEmployeeDaoImple implements PoliceEmployeeDao {
 				
 				return user;
 			}
-			
 		});
 		
 		int roleIdOfAdmin = user1.getRole_id();
@@ -163,27 +158,158 @@ public class PoliceEmployeeDaoImple implements PoliceEmployeeDao {
 		return roleIdOfAdmin;
 	}
 
-
 	@Override
-	public String getRole_desc(int role_id) {
-
-		String sql = "select role_desc from m_role where role_id = ? ";
+	public List<PoliceEmployee> getRole_desc(int id) {
 		
-		PoliceEmployee policeEmp2 = jt.queryForObject(sql, new Object[] {role_id}, new RowMapper<PoliceEmployee>() {
+		String sql = "select emp_id,emp_name,emp_desig,emp_mob,emp_email,emp_dob,ps_id, ps_emp.role_id,m_role.role_desc from ps_emp left join m_role on ps_emp.role_id = m_role.role_id where ps_id = ?";
+		
+		List<PoliceEmployee> descList = jt.query(sql,new Object[] {id}, new RowMapper<PoliceEmployee>() {
 
 			@Override
 			public PoliceEmployee mapRow(ResultSet rs, int rowNum) throws SQLException {
-			
-				PoliceEmployee policeEmp = new PoliceEmployee();
-				policeEmp.setRole_desc(rs.getString("role_desc"));
-				return policeEmp;
+				PoliceEmployee ps = new PoliceEmployee();
+				ps.setEmp_id(rs.getInt("emp_id"));
+				ps.setEmp_mob(rs.getLong("emp_mob"));
+				ps.setEmp_desig(rs.getString("emp_desig"));
+				ps.setEmp_name(rs.getString("emp_name"));
+				ps.setEmp_dob(rs.getDate("emp_dob"));
+				ps.setEmp_email(rs.getString("emp_email"));
+				ps.setPs_id(rs.getInt("ps_id"));
+				ps.setRole_id(rs.getInt("role_id"));
+				ps.setRole_desc(rs.getString("role_desc"));
+				return ps;
 			}
 		});
 		
-		String role_desc = policeEmp2.getRole_desc();
-		
-		return role_desc;
+		return descList;
 	}
 
+//	ADMIN DOWNWARD
+	@Override
+	public int getCount(int roleId, int psId) {
+		
+		System.out.println("ROLE ID AND PSID -->>"+roleId +" "+ psId);
+		
+		String sql = "select count(role_id) from ps_emp where ps_id = ? and role_id = ?";
+		
+		int rolePresent = jt.queryForObject(sql, new Object[] {psId ,roleId},new RowMapper<Integer>() {
+
+			@Override
+			public Integer mapRow(ResultSet rs, int rowNum) throws SQLException {
+			
+				int i = rs.getInt("count(role_id)");
+				System.out.println("COUNT IS -->> " + i);
+				return i;
+			}
+		});
+
+		if(rolePresent == 1)
+		{
+			System.out.println("Returning True");
+			return 1;
+		}
+		else if(rolePresent == 0)
+		{	
+			System.out.println("Returning ELSE");
+			return 0;
+		}
+		
+		return 0;
+		
+	}
+
+	@Override
+	public void setAdminNull(int roleId) {
+		String s = null;
+		String sql = "update ps_emp set role_id = ? where role_id = ?" ;
+		int i = jt.update(sql,s,roleId);
+		System.out.println("QUERY -- >> ?? " + i);
+		
+	}
+
+	@Override
+	public void setNewAdmin(int roleId, int empId) {
+		
+		int i = 55;
+		String sql = "update ps_emp set role_id = ? where emp_id = ?";
+		
+		int update = jt.update(sql,i,empId);
+		
+	}
+
+	@Override
+	public int getRoleId(int psId) {
+		
+		String sql = "select role_id from ps_emp where ps_id = ? and role_id = ?"; 
+		int i = 55;
+		int rolePresent;
+		try {
+			rolePresent = jt.queryForObject(sql, new Object[] {psId,i},new RowMapper<Integer>() {
+
+				@Override
+				public Integer mapRow(ResultSet rs, int rowNum) throws SQLException {
+				
+					int i = rs.getInt("role_id");
+					System.out.println("ROLE ID -->> "+i);
+					return i;
+				}
+			}); 
+
+		} catch (Exception e) {
+			rolePresent = 0;
+		}
+				
+		return rolePresent;
+	}
+
+
+	
+//	FEO DOWNWARD
+	
+	@Override
+	public void setNullFeo(int roleId) {
+		String s = null;
+		String sql = "update ps_emp set role_id = ? where role_id = ?" ;
+		int i = jt.update(sql,s,roleId);
+		System.out.println("QUERY -- >> ?? " + i);
+		
+	}
+
+
+	@Override
+	public void setNewFeo(int roleId, int empId) {
+		// TODO Auto-generated method stub
+		int i = 66;
+		String sql = "update ps_emp set role_id = ? where emp_id = ?";
+		
+		int update = jt.update(sql,i,empId);
+	}
+
+
+	@Override
+	public int getRoleIdFeo(int psId) {
+		String sql = "select role_id from ps_emp where ps_id = ? and role_id = ?"; 
+		int i = 66;
+		int rolePresent;
+		try {
+			rolePresent = jt.queryForObject(sql, new Object[] {psId,i},new RowMapper<Integer>() {
+
+				@Override
+				public Integer mapRow(ResultSet rs, int rowNum) throws SQLException {
+				
+					int i = rs.getInt("role_id");
+					System.out.println("ROLE ID -->> "+i);
+					return i;
+				}
+			}); 
+
+		} catch (Exception e) {
+			rolePresent = 0;
+		}
+				
+		return rolePresent;
+	}
+	
+	
 	
 }

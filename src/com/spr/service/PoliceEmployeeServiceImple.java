@@ -47,9 +47,51 @@ public class PoliceEmployeeServiceImple implements PoliceEmployeeService {
 		return policeEmpDao.getRoleIdOfSubAdmin(userEmail);
 	}
 
+
+
 	@Override
-	public String getRole_desc(int role_id) {
-		return policeEmpDao.getRole_desc(role_id);
+	public List<PoliceEmployee> getRole_desc(int id) {
+		
+		return policeEmpDao.getRole_desc(id);
+	}
+
+	@Override
+	public int getCount(int roleId, int psId) {
+		
+		return policeEmpDao.getCount(roleId, psId);
+	}
+
+	@Override
+	public void setAdminNull(int roleId) {
+		policeEmpDao.setAdminNull(roleId);
+	}
+
+	@Override
+	public void setNewAdmin(int roleId, int empId) {
+		policeEmpDao.setNewAdmin(roleId, empId);
+	}
+
+	@Override
+	public int getRoleId(int psId) {
+		return policeEmpDao.getRoleId(psId);
+	}
+
+	@Override
+	public void setNullFeo(int roleId) {
+		// TODO Auto-generated method stub
+		policeEmpDao.setNullFeo(roleId);
+	}
+
+	@Override
+	public void setNewFeo(int roleId, int empId) {
+		// TODO Auto-generated method stub
+		policeEmpDao.setNewFeo(roleId, empId);
+	}
+
+	@Override
+	public int getRoleIdFeo(int psId) {
+		// TODO Auto-generated method stub
+		return policeEmpDao.getRoleIdFeo(psId);
 	}
 	
 	

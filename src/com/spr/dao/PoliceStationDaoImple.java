@@ -44,11 +44,9 @@ public class PoliceStationDaoImple implements PoliceStationDao {
 		            return  ps;
 		        }
 		 
-		}
-				
-				
-				);
-		System.out.println(poList.toString());
+		});
+		
+		
 		return poList;
 	}
 

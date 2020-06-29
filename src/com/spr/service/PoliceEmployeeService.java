@@ -18,5 +18,20 @@ public interface PoliceEmployeeService {
 	
 	int getRoleIdOfSubAdmin(String userEmail);
 	
-	String getRole_desc(int role_id);
+	List<PoliceEmployee> getRole_desc(int id);
+	
+	int getCount(int roleId,int psId);
+	
+	void setAdminNull(int roleId);
+	
+	void setNewAdmin(int roleId,int empId);
+	
+	int getRoleId(int psId);
+	
+
+	void setNullFeo(int roleId);
+	
+	void setNewFeo(int roleId,int empId);
+	
+	int getRoleIdFeo(int psId);
 }

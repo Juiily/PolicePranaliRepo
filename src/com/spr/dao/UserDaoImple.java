@@ -29,13 +29,16 @@ public class UserDaoImple implements UserDao{
 				
 				User user = new User();
 				
-				user.setEmpId(rs.getInt(1));
+				user.setEmpId(rs.getInt("emp_id"));
 				
 				return user; 
 			}
 			
 		});
-		System.out.println("Email->> " +user.getUserEmail());
+		
+		System.out.println("EMP ID -- >> " + user1.getEmpId());
+		
+		System.out.println("FROM LOGOUT Email->> " +user.getUserEmail());
 		String sql2 = "select role_id from user_role where emp_id = ?";
 		
 		User user2 = jt.queryForObject(sql2, new Object[] {user1.getEmpId()}, new RowMapper<User>() {
@@ -49,18 +52,19 @@ public class UserDaoImple implements UserDao{
 				return user;
 			}
 		});
-		System.out.println("EMP ID ->> " +user1.getEmpId());
-		System.out.println("USERNAME ->> " +user.getUserPassword());
-		System.out.println("EMAIL ->> " +user.getUserEmail());
-		String sql3 = "select*from user where user_password = ? and user_email = ? ";
+		System.out.println("ROLE ID USER2 -->> "+user2.getRole_id());
+		System.out.println("FROM LOGOUT EMAIL ->> " +user.getUserEmail());
 		
-		try {				
+		
+		
+		try {
+				String sql3 = "select*from user where user_password = ? and user_email = ? ";
 				int i = user2.getRole_id();
 				User user3 = jt.queryForObject(sql3,new Object[] { user.getUserPassword(),user.getUserEmail()}, new RowMapper<User>(){
 	
 				@Override
 				public User mapRow(ResultSet rs, int rowNum) throws SQLException {
-						
+					System.out.println("Inside User 3 ");
 					User user = new User();
 					user.setUserPassword(rs.getString("user_password"));
 					user.setUserEmail(rs.getString("user_email"));	
@@ -75,6 +79,7 @@ public class UserDaoImple implements UserDao{
 				
 				if(user3 != null)
 				{
+					System.out.println("User 3 returned");
 					return user3;
 				}
 			

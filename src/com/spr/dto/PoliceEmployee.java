@@ -79,13 +79,14 @@ public class PoliceEmployee {
 	public void setRole_desc(String role_desc) {
 		this.role_desc = role_desc;
 	}
-	
-	
 	@Override
 	public String toString() {
 		return "PoliceEmployee [emp_id=" + emp_id + ", emp_name=" + emp_name + ", emp_mob=" + emp_mob + ", emp_desig="
-				+ emp_desig + ", emp_email=" + emp_email + ", emp_dob=" + emp_dob + ", ps_id=" + ps_id + "]";
+				+ emp_desig + ", emp_email=" + emp_email + ", emp_dob=" + emp_dob + ", ps_id=" + ps_id + ", role_id="
+				+ role_id + ", role_desc=" + role_desc + "]";
 	}
+	
+	
 	
 	
 }

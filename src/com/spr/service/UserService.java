@@ -7,4 +7,5 @@ public interface UserService {
 
 	User Login(User user);
 	PoliceEmployee getUserName(String userEmail);
+	boolean isUsernameExist(String username);
 }

@@ -27,41 +27,47 @@ public class PoliceEmployeeController {
 	//PoliceStationList
 	//--------------------------------------------------------------------------------------------------------------
 	@RequestMapping(value = "/poList",method = RequestMethod.POST)
-	public ModelAndView listOfPoliceEmp(@RequestParam String id) {
+	public ModelAndView listOfPoliceEmp(@RequestParam int  id) {
 
-		int id1=Integer.parseInt(id);
+		//int id1=Integer.parseInt(id);
 
 		ModelAndView model=new ModelAndView();
-
-		List<PoliceEmployee> poEmpList = policeEmpServ.policeList(id1);
-
-		model.addObject("poEmpList", poEmpList);
+//
+//		List<PoliceEmployee> poEmpList = policeEmpServ.policeList(id1);
+//		model.addObject("poEmpList", poEmpList);
+//		model.setViewName("m_admin_home");
+//		
+		
+		List<PoliceEmployee> descList = policeEmpServ.getRole_desc(id);
+		model.addObject("descList", descList);
 		model.setViewName("m_admin_home");
+		
 		return model ;
 	}
 
 	//PoliceEmployeeList
 	//---------------------------------------------------------------------------------------------------------------
 	@RequestMapping(value = "assignAdmin", method = RequestMethod.POST)
-	public ModelAndView assignSubAdmin(@RequestParam String id,@RequestParam String roleId,HttpSession session)
+	public ModelAndView assignSubAdmin(@RequestParam int empId,@RequestParam int psId,@RequestParam int roleId,HttpSession session)
 	{
-		int id1 = Integer.parseInt(id);
-		int roleId1 = Integer.parseInt(roleId);
-		
 		ModelAndView model = new ModelAndView();
-
-		if(roleId1 == 0)
+		
+		int i = policeEmpServ.getRoleId(psId);
+		
+		if(i == 55 )
 		{
-			roleId1 = 55;
-			policeEmpServ.setPsAdmin(id1, roleId1);
+			System.out.println("Inside IF ,if 55");
+			policeEmpServ.setAdminNull(i);
+			policeEmpServ.setNewAdmin(55,empId);
 		}
-
-		else if(roleId1 == 55)
+		
+		else if(i == 0) 
 		{	
-			String roleId2 = null;
-			policeEmpServ.removePsAdmin(id1,roleId2);
+			//i = policeEmpServ.getCount(roleId, psId);
+			System.out.println("INSIDE IF");	
+			policeEmpServ.setNewAdmin(roleId,empId);
 		}
-		model.setViewName("m_admin_home");
+			model.setViewName("m_admin_home");
 		return model;
 
 	}
@@ -69,34 +75,47 @@ public class PoliceEmployeeController {
 	//Assign FEO
 	//---------------------------------------------------------------------------------------------------------------	
 	@RequestMapping(value = "assignAdmin1", method = RequestMethod.POST)
-	public ModelAndView assignFEO1(@RequestParam String id,@RequestParam String roleId,HttpSession session,@RequestParam String userEmail)
+	public ModelAndView assignFEO1(@RequestParam int empId,@RequestParam int psId,@RequestParam int roleId,HttpSession session,@RequestParam String userEmail)
 	{
-		int id1 = Integer.parseInt(id);
-		int roleId1 = Integer.parseInt(roleId);
-		
-		int getRoleId = policeEmpServ.getRoleIdOfSubAdmin(userEmail);
-		
-		
 		ModelAndView model = new ModelAndView();
-
-		if(getRoleId==55)
+		
+		int i = policeEmpServ.getRoleIdFeo(psId);
+		
+		if(i == 66 )
 		{
-			if(roleId1 == 0 )
-			{
-				roleId1 = 66;
-				policeEmpServ.setPsAdmin(id1, roleId1);
-			}
-	
-			else if(roleId1 == 66)
-			{	
-				String roleId2 = null;
-				policeEmpServ.removePsAdmin(id1,roleId2);
-			}
-		}	
-		model.setViewName("s_admin_home");
+			System.out.println("Inside IF ,if 66");
+			policeEmpServ.setNullFeo(i);
+			policeEmpServ.setNewFeo(66, empId);
+		}
+		
+		else if(i == 0) 
+		{	
+			//i = policeEmpServ.getCount(roleId, psId);
+			System.out.println("INSIDE IF");	
+			policeEmpServ.setNewFeo(roleId, empId);
+		}
+			model.setViewName("s_admin_home");
+			
 		return model;
-
-	}
+		
+		
+		
+		
+		/*
+		 * int id1 = Integer.parseInt(id); int roleId1 = Integer.parseInt(roleId);
+		 * 
+		 * int getRoleId = policeEmpServ.getRoleIdOfSubAdmin(userEmail);
+		 * 
+		 * 
+		 * ModelAndView model = new ModelAndView();
+		 * 
+		 * if(getRoleId==55) { if(roleId1 == 0 ) { roleId1 = 66;
+		 * policeEmpServ.setPsAdmin(id1, roleId1); }
+		 * 
+		 * else if(roleId1 == 66) { String roleId2 = null;
+		 * policeEmpServ.removePsAdmin(id1,roleId2); } }
+		 * model.setViewName("s_admin_home"); return model;
+		 */	}
 	
 	//Police SubAdmin Role Assignment
 	//---------------------------------------------------------------------------------------------------------------
@@ -154,29 +173,17 @@ public class PoliceEmployeeController {
 	//---------------------------------------------------------------------------------------------------------------
 	@RequestMapping(value = "psEmpListForSubAdmin",method = RequestMethod.POST)
 	public ModelAndView displayListToSubAdmin(ModelAndView model,@RequestParam String userEmail) {
-
+		System.out.println("inside controller");
 		int gotId = policeEmpServ.getSubAdminPsId(userEmail);
 
 		List<PoliceEmployee> policeList = policeEmpServ.policeEmpList(gotId);
-
+		System.out.println(policeList);
 		model.addObject("policeList", policeList);
 		model.setViewName("s_admin_home");
 
-		return model;
-	}
-
-	
-	//for description of role
-	//---------------------------------------------------------------------------------------
-	
-	public ModelAndView displayRoleDesc(ModelAndView model,@RequestParam int role_id)
-	{
-		String desc = policeEmpServ.getRole_desc(role_id);
-		model.addObject("roledesc", desc);
-		model.setViewName("s_admin_home");
+		
 		
 		return model;
-		
 	}
 
 }

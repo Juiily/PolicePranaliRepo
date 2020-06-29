@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.spr.dto.PoliceEmployee;
 import com.spr.dto.PoliceStation;
+import com.spr.service.PoliceEmployeeService;
 import com.spr.service.PoliceStationService;
 
 @Controller
@@ -17,6 +19,9 @@ public class PoliceStationController {
 
 	@Autowired
 	private PoliceStationService psService;
+	
+	@Autowired
+	private PoliceEmployeeService policeEmpServ;
 	
 	public void setpsService(PoliceStationService psService)
 	{
@@ -29,6 +34,7 @@ public class PoliceStationController {
 		List<PoliceStation>psList=psService.pList();
 		model.addObject("psList",psList);
 		model.setViewName("m_admin_home");
+		
 		
 		return model;
 	}

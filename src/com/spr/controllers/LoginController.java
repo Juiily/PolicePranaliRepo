@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.spr.dto.PoliceEmployee;
@@ -52,23 +53,29 @@ public class LoginController {
 								System.out.println("INSSIDE IF LOOOOP");
 								session.setAttribute("userName",userName);
 								session.setAttribute("userEmail", user2.getUserEmail());
+								session.setAttribute("roleId", user2.getRole_id());
+								
 								System.out.println("Inside m_role");
 								System.out.println(session.getAttribute("userName"));
 								model.setViewName("m_admin_home");
 							}
 							else if(user2.getRole_id()==55)
 							{
-								model.setViewName("s_admin_home");
+								
 								session.setAttribute("userEmail", user2.getUserEmail());
 								session.setAttribute("userName",userName);
+								session.setAttribute("roleId", user2.getRole_id());
+								model.setViewName("s_admin_home");
 							}
 							else
 							{
-								model.setViewName("fir_userHome");
+								model.setViewName("Feo_FirSelectionForm");
 								session.setAttribute("userName",userName);
 								session.setAttribute("userEmail", user2.getUserEmail());
+								session.setAttribute("roleId", user2.getRole_id());
 								System.out.println("Inside normal user");
 								System.out.println(session.getAttribute("userName"));
+								
 							}
 					}
 					
@@ -88,4 +95,16 @@ public class LoginController {
 
 		}
 
+
+	@RequestMapping(value="/check_username",method = RequestMethod.GET)
+	@ResponseBody
+	public String checkAvailability(@RequestParam String username)
+	{
+		if(userServ.isUsernameExist(username))
+			return "";
+		else if(username == "")
+			return "Email Cannot blank";
+		else
+			return "Username is Invalid";
 	}
+}

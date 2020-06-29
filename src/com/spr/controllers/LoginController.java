@@ -22,9 +22,11 @@ public class LoginController {
 	public UserService userServ;
 
 	@GetMapping
+	
 	public String dispLogin() {
 		return "login";
 	}
+	
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ModelAndView loginSuccess(@RequestParam("userEmail") String userEmail,
